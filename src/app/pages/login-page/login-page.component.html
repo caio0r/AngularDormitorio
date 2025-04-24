@@ -1,0 +1,26 @@
+<div class="container text-center mt-5">
+  <img src="../../../assets/icon.png" alt="Logo" class="mb-4" width="120" />
+
+  <h2 class="mb-4">Bem-vindo</h2>
+
+  <form (ngSubmit)="login()" class="d-flex justify-content-center mb-3 gap-2 flex-wrap">
+    <input type="email" [(ngModel)]="username" name="username" class="form-control w-auto" placeholder="E-mail" required />
+    <input type="password" [(ngModel)]="password" name="password" class="form-control w-auto" placeholder="Senha" required />
+    <button type="submit" class="btn btn-primary">Entrar</button>
+  </form>
+
+  <!-- Botão que controla o collapse -->
+  <button class="btn btn-outline-secondary mb-3" type="button" (click)="toggleAdmin()">
+    Admin
+  </button>
+
+  <!-- Bloco de login do admin -->
+  <div [class.collapse]="!mostrarAdmin" id="adminLogin">
+    <div class="card card-body shadow mx-auto" style="max-width: 300px;">
+      <h5 class="text-center mb-3">Login do Administrador</h5>
+      <input type="text" class="form-control mb-2" placeholder="E-mail do admin" />
+      <input type="password" class="form-control mb-3" placeholder="Senha" />
+      <button class="btn btn-primary w-100">Entrar como Admin</button>
+    </div>
+  </div>
+</div>

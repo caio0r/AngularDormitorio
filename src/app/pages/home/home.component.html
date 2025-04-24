@@ -1,0 +1,22 @@
+<app-navbar></app-navbar>
+
+<h1 style="text-align: center;">Gerenciamento de Dormitórios</h1>
+
+<div class="botoes-filtro">
+  <button (click)="filtro = 'TODAS'">Todas as Camas</button>
+  <button (click)="filtro = 'M'">Dormitório Masculino</button>
+  <button (click)="filtro = 'F'">Dormitório Feminino</button>
+</div>
+
+<!-- Listagem das camas -->
+<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+  <app-cama-card
+  *ngFor="let cama of camas | camaFiltro:filtro; let i = index"
+  [nome]="cama.numero"
+  [status]="cama.status"
+  [colaborador]="cama.colaborador"
+  [tempoDeUso]="cama.tempoDeUso"
+  [sexoDormitorio]="cama.sexoDormitorio"
+  >
+</app-cama-card>
+</div>

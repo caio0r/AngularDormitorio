@@ -1,0 +1,83 @@
+<div
+  class="cama-card"
+  [ngClass]="{
+    disponivel: status === 'DISPONIVEL',
+    manutencao: status === 'EM MANUTENCAO',
+    emUso: status === 'EM USO'
+  }"
+>
+  <div class="conteudo-card">
+    <!-- LADO ESQUERDO: INFORMAÇÕES -->
+    <div class="info-cama">
+      <h3>{{ nome }}</h3>
+
+      <!-- Botões de alteração de status -->
+      <div class="popup-opcoes">
+        <button (click)="alterarStatus('DISPONIVEL')">Disponível</button>
+        <button (click)="alterarStatus('EM USO')">Em Uso</button>
+        <button (click)="alterarStatus('EM MANUTENCAO')">Em Manutenção</button>
+      </div>
+
+      <!-- Status atual -->
+      <div class="status-texto">
+        <p *ngIf="status === 'DISPONIVEL'">DISPONÍVEL</p>
+        <p *ngIf="status === 'EM MANUTENCAO'">EM MANUTENÇÃO</p>
+        <ng-container *ngIf="status === 'EM USO'">
+          <p>EM USO POR: <strong>{{ colaborador }}</strong></p>
+          <p>TEMPO DE USO: <strong>{{ tempoDeUso }} min</strong></p>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- LADO DIREITO: IMAGEM DE STATUS -->
+    <div class="imagem-status">
+      <img
+        *ngIf="status === 'DISPONIVEL'"
+        src="assets/DisponivelImg.png"
+        alt="Disponível"
+      />
+      <img
+        *ngIf="status === 'EM MANUTENCAO'"
+        src="assets/ManutencaoImg.png"
+        alt="Manutenção"
+      />
+      <img
+        *ngIf="status === 'EM USO'"
+        src="assets/EmUsoImg.avif"
+        alt="Em Uso"
+      />
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div *ngIf="mostrarModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Vincular Colaborador</h2>
+
+      <form (ngSubmit)="confirmarVinculo()" #formModal="ngForm">
+        <div class="form-group">
+          <label>Sexo:</label>
+          <select [(ngModel)]="sexoSelecionado" name="sexoSelecionado" [disabled]="true">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+          </select>        
+        </div>
+
+        <div class="form-group">
+          <label>ID do Crachá:</label>
+          <input type="text" [(ngModel)]="cracha" name="cracha" (blur)="buscarColaboradorPorCracha()" required>
+        </div>
+
+        <div class="form-group">
+          <label>Nome:</label>
+          <input type="text" [(ngModel)]="nomeColaborador" name="nomeColaborador" readonly>
+        </div>
+
+        <div class="botoes-confirmar-cancelar">
+          <button type="submit">Confirmar</button>
+          <button type="button" (click)="fecharModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+.botoes-filtro {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .botoes-filtro button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .botoes-filtro button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .botoes-filtro button:active {
+    transform: scale(0.95);
+  }
+  
