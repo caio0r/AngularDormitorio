@@ -2,16 +2,24 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'camaFiltro',
-  standalone: true,
+  standalone: true
 })
 export class CamaFiltroPipe implements PipeTransform {
   transform(camas: any[], filtro: string): any[] {
-    if (!camas) return [];
+    if (!camas || !filtro) return camas;
 
-    if (filtro === 'TODAS') {
-      return camas;
-    }
-
-    return camas.filter(cama => cama.sexoDormitorio === filtro);
+    return camas.filter(cama => {
+      const tipo = (cama?.sexoDormitorio || '').toUpperCase(); // previne erro de undefined
+      switch (filtro) {
+        case 'M':
+          return tipo === 'MASCULINO';
+        case 'F':
+          return tipo === 'FEMININO';
+        case 'P':
+          return tipo === 'POLTRONA';
+        default:
+          return true; // Retorna todas se filtro for desconhecido
+      }
+    });
   }
 }

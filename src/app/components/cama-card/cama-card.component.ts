@@ -1,123 +1,114 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 👈 Importado
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cama-card',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cama-card.component.html',
   styleUrls: ['./cama-card.component.css']
 })
 export class CamaCardComponent {
+  constructor(private http: HttpClient) {}
+
   @Input() nome!: string;
   @Input() status!: 'DISPONIVEL' | 'EM USO' | 'EM MANUTENCAO';
   @Input() colaborador?: string;
   @Input() tempoDeUso?: number;
   @Output() clicar = new EventEmitter<void>();
-  @Input() sexoDormitorio!: string; // Receber a informação de M ou F
+  @Input() sexoDormitorio!: string;
+  @Output() clicarCama = new EventEmitter<void>();
 
-
-  mostrarBigBox: boolean = false;
+  mostrarModal: boolean = false;
   sexoSelecionado: string = '';
   cracha: string = '';
   nomeColaborador: string = '';
-  mostrarModal: boolean = false;
 
-abrirModal() {
-  this.mostrarModal = true;
-}
+  onClick() {
+    this.clicarCama.emit();
+  }
 
-fecharModal() {
-  this.mostrarModal = false;
-}
+  abrirModal() {
+    this.mostrarModal = true;
+  }
 
-alterarStatus(novoStatus: 'DISPONIVEL' | 'EM USO' | 'EM MANUTENCAO') {
-  if (novoStatus === 'EM USO') {
-    this.abrirModal();
-  } 
-  else {
-    if (this.status === 'EM USO') {
-      const confirmacao = confirm('O colaborador ainda não terminou o descanso de 1 hora. Tem certeza que deseja continuar?');
-      if (!confirmacao) {
-        return; // se o usuário clicar em "Cancelar", não faz nada
+  fecharModal() {
+    this.mostrarModal = false;
+    this.resetarCampos();
+  }
+
+  onAlterar(novoStatus: 'DISPONIVEL' | 'EM USO' | 'EM MANUTENCAO', ev: MouseEvent) {
+    ev.stopPropagation();
+
+    if (novoStatus === 'EM USO') {
+      this.abrirModal();
+    } else {
+      if (this.status === 'EM USO') {
+        const confirmacao = confirm('O colaborador ainda não terminou o descanso de 1 hora. Tem certeza que deseja continuar?');
+        if (!confirmacao) return;
       }
+      this.atualizarStatus(novoStatus);
+    }
+  }
+
+  atualizarStatus(novoStatus: 'DISPONIVEL' | 'EM USO' | 'EM MANUTENCAO') {
+    this.status = novoStatus;
+    if (novoStatus !== 'EM USO') {
+      this.colaborador = undefined;
+      this.tempoDeUso = undefined;
+    }
+    this.resetarCampos();
+  }
+
+  buscarColaboradorPorCracha() {
+    if (!this.cracha) return;
+  
+    this.http.get<any>(`http://localhost:8080/api/colaboradores/cracha/${this.cracha.trim()}`)
+      .subscribe({
+        next: (colaborador) => {
+          const sexoCama = (this.sexoDormitorio || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          const sexoColab = (colaborador.sexo || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  
+          const camaMasculina = sexoCama === 'MASCULINO';
+          const camaFeminina = sexoCama === 'FEMININO';
+  
+          const sexoIncompativel = 
+            (camaMasculina && sexoColab !== 'MASCULINO') ||
+            (camaFeminina && sexoColab !== 'FEMININO');
+  
+          if (sexoIncompativel) {
+            alert(`Sexo incompatível com a cama selecionada!\nEsperado: ${sexoCama}, Recebido: ${sexoColab}`);
+            this.resetarCampos();
+            return;
+          }
+  
+          this.nomeColaborador = colaborador.nome;
+          this.sexoSelecionado = colaborador.sexo;
+        },
+        error: () => {
+          alert('Colaborador não encontrado!');
+          this.resetarCampos();
+        }
+      });
+  }
+  
+
+  confirmarVinculo() {
+    if (!this.nomeColaborador || !this.cracha || !this.sexoSelecionado) {
+      alert('Preencha corretamente todos os campos!');
+      return;
     }
 
-    this.status = novoStatus;
-    this.colaborador = undefined;
-    this.tempoDeUso = undefined;
-    this.resetarCampos();
+    this.colaborador = this.nomeColaborador;
+    this.status = 'EM USO';
+    this.tempoDeUso = 0;
+    this.fecharModal();
   }
-}
-
-buscarColaboradorPorCracha() {
-  const colaboradoresFake: { [key: string]: { nome: string; sexo: 'M' | 'F' } } = {
-    '123': { nome: 'João Silva', sexo: 'M' },
-    '456': { nome: 'Maria Souza', sexo: 'F' },
-    '789': { nome: 'Carlos Pereira', sexo: 'M' }
-  };
-
-  const colaborador = colaboradoresFake[this.cracha];
-
-  if (!colaborador) {
-    alert('Colaborador não encontrado!');
-    this.nomeColaborador = '';
-    this.sexoSelecionado = '';
-    return;
-  }
-
-  // SEXO do dormitório (não pelo nome da cama)
-  const camaMasculina = this.sexoDormitorio === 'M';
-  const camaFeminina = this.sexoDormitorio === 'F';
-
-  const sexoIncompativel = (camaMasculina && colaborador.sexo === 'F') || 
-                          (camaFeminina && colaborador.sexo === 'M');
-
-  if (sexoIncompativel) {
-    alert('Sexo incompatível com a cama selecionada!');
-    this.nomeColaborador = '';
-    this.sexoSelecionado = '';
-    return;
-  }
-
-  this.nomeColaborador = colaborador.nome;
-  this.sexoSelecionado = colaborador.sexo;
-}
-
-
-
-confirmarVinculo() {
-  if (!this.nomeColaborador || this.nomeColaborador === 'Colaborador não encontrado' || !this.cracha || !this.sexoSelecionado) {
-    alert('Preencha corretamente todos os campos!');
-    return;
-  }
-
-  // SEXO do dormitório (não pelo nome da cama)
-  const camaMasculina = this.sexoDormitorio === 'M';
-  const camaFeminina = this.sexoDormitorio === 'F';
-
-  if (camaMasculina && this.sexoSelecionado === 'F') {
-    alert('Esta cama é para uso masculino. Selecione um colaborador masculino.');
-    return;
-  }
-
-  if (camaFeminina && this.sexoSelecionado === 'M') {
-    alert('Esta cama é para uso feminino. Selecione uma colaboradora feminina.');
-    return;
-  }
-
-  this.colaborador = this.nomeColaborador;
-  this.status = 'EM USO';
-  this.tempoDeUso = 0;
-  this.mostrarBigBox = false;
-  this.fecharModal();
-}
-
 
   cancelar() {
-    this.mostrarBigBox = false;
-    this.resetarCampos();
+    this.fecharModal();
   }
 
   private resetarCampos() {

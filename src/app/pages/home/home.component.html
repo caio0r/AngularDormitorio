@@ -3,13 +3,13 @@
 <h1 style="text-align: center;">Gerenciamento de Dormitórios</h1>
 
 <div class="botoes-filtro">
-  <button (click)="filtro = 'TODAS'">Todas as Camas</button>
   <button (click)="filtro = 'M'">Dormitório Masculino</button>
   <button (click)="filtro = 'F'">Dormitório Feminino</button>
+  <button (click)="filtro = 'P'">Poltronas</button>
 </div>
 
 <!-- Listagem das camas -->
-<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+<div class="container-camas">
   <app-cama-card
   *ngFor="let cama of camas | camaFiltro:filtro; let i = index"
   [nome]="cama.numero"
@@ -17,6 +17,9 @@
   [colaborador]="cama.colaborador"
   [tempoDeUso]="cama.tempoDeUso"
   [sexoDormitorio]="cama.sexoDormitorio"
-  >
-</app-cama-card>
+  (clicarCama)="abrirAlterarStatus(i)"
+></app-cama-card>
+
 </div>
+<app-cadastro-colaboradores></app-cadastro-colaboradores>
+

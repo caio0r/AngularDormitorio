@@ -24,3 +24,11 @@
     transform: scale(0.95);
   }
   
+  .container-camas {
+    display: flex;
+    flex-wrap: wrap;         /* quebra em várias linhas */
+    gap: 30px;               /* espaço entre os cards */
+    justify-content: center; /* centraliza horizontalmente */
+    padding: 20px 0;         /* opcional: espaço acima/abaixo */
+  }
+  

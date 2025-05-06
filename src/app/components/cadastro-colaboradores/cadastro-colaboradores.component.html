@@ -1,0 +1,42 @@
+<!-- Ícone no canto esquerdo -->
+<!-- Botão com imagem fixa -->
+<div style="position: fixed; top: 80px; left: 20px; z-index: 1000;">
+  <img
+    src="../../../assets/addUser.png"
+    alt="Cadastro"
+    (click)="toggleFormulario()"
+    style="width: 48px; height: 48px; cursor: pointer;"
+  />
+</div>
+
+<!-- Modal de cadastro -->
+<div *ngIf="mostrarFormulario" class="modal-backdrop">
+  <div class="modal-content">
+    <h3>Cadastrar Colaborador</h3>
+    <form (ngSubmit)="cadastrar()">
+      <label>Nome:</label>
+      <input type="text" [(ngModel)]="colaborador.nome" name="nome" required />
+
+      <label>Sexo:</label>
+      <select [(ngModel)]="colaborador.sexo" name="sexo" required>
+        <option value="">Selecione</option>
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMININO">Feminino</option>
+      </select>
+
+      <label>Matrícula:</label>
+      <input type="text" [(ngModel)]="colaborador.matricula" name="matricula" required />
+
+      <label>Setor:</label>
+      <input type="text" [(ngModel)]="colaborador.setor" name="setor" required />
+
+      <label>Crachá:</label>
+      <input type="text" [(ngModel)]="colaborador.cracha" name="cracha" required />
+
+      <button type="submit">Salvar</button>
+      <button type="button" (click)="toggleFormulario()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+  

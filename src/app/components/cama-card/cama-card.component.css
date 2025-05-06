@@ -1,146 +1,111 @@
-.cama-card {
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 600px;
-  margin: 15px auto;
-  transition: box-shadow 0.3s ease;
-}
-
-.cama-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.conteudo-card {
+.cama-conteudo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.info-cama {
+.imagem-wrapper img {
+  width: 120px; /* ajuste conforme necessário */
+  height: auto;
+  border-radius: 8px;
+}
+
+.menu-opcoes-fixo {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 6px;
 }
 
-.info-cama h3 {
-  font-size: 28px;
-  margin: 0 0 10px 0;
-}
-
-.info-cama p {
-  font-size: 20px;
-  margin: 5px 0;
-}
-
-.popup-opcoes {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.popup-opcoes button {
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
+.menu-opcoes-fixo button {
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s;
 }
 
-.popup-opcoes button:hover {
-  background-color: #145a96;
+.menu-opcoes-fixo button:hover {
+  background: #f0f0f0;
 }
-
-.imagem-status img {
-  width: 120px;
-  height: auto;
-}
-
-/* Estilos para status */
-.disponivel {
-  border-color: #4caf50;
-}
-
-.manutencao {
-  border-color: #ff9800;
-}
-
-.emUso {
-  border-color: #f44336;
-}
-/* cama-card.component.css */
 
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* fundo escuro */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content h2 {
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 22px;
   text-align: center;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 .form-group label {
-  margin-bottom: 0.5rem;
+  display: block;
+  margin-bottom: 6px;
   font-weight: bold;
 }
 
 .form-group input,
 .form-group select {
-  padding: 0.5rem;
+  width: 100%;
+  padding: 8px 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 .botoes-confirmar-cancelar {
   display: flex;
   justify-content: space-between;
-  margin-top: 1.5rem;
+  margin-top: 20px;
 }
 
-.botoes-confirmar-cancelar button {
-  padding: 0.7rem 1.2rem;
+.btn-confirmar {
+  background-color: #28a745;
+  color: #fff;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.botoes-confirmar-cancelar button[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
+.btn-cancelar {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.botoes-confirmar-cancelar button[type="button"] {
-  background-color: #f44336;
-  color: white;
+.btn-confirmar:hover {
+  background-color: #218838;
 }
 
+.btn-cancelar:hover {
+  background-color: #c82333;
+}
